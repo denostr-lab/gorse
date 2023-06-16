@@ -1486,6 +1486,7 @@ func (m *Master) LoadDataFromDatabase(database data.Database, posFeedbackTypes, 
 			if len(rankingDataset.ItemLabels) == int(itemIndex) {
 				rankingDataset.ItemLabels = append(rankingDataset.ItemLabels, nil)
 				rankingDataset.HiddenItems = append(rankingDataset.HiddenItems, false)
+				rankingDataset.Popular = append(rankingDataset.Popular, 0)
 				rankingDataset.ItemCategories = append(rankingDataset.ItemCategories, item.Categories)
 				rankingDataset.CategorySet.Add(item.Categories...)
 			}
@@ -1510,13 +1511,18 @@ func (m *Master) LoadDataFromDatabase(database data.Database, posFeedbackTypes, 
 			}
 			if item.IsHidden { // set hidden flag
 				rankingDataset.HiddenItems[itemIndex] = true
-			} else if !item.Timestamp.IsZero() { // add items to the latest items filter
+			} else if !item.Timestamp.IsZero() {
+				// add items to the latest items filter
 				latestItemsFilters[""].Push(item.ItemId, float64(item.Timestamp.Unix()))
 				for _, category := range item.Categories {
 					if _, exist := latestItemsFilters[category]; !exist {
 						latestItemsFilters[category] = heap.NewTopKFilter[string, float64](m.Config.Recommend.CacheSize)
 					}
 					latestItemsFilters[category].Push(item.ItemId, float64(item.Timestamp.Unix()))
+				}
+				// add popular value
+				if item.Timestamp.After(timeWindowLimit) && item.Heating > 0 {
+					rankingDataset.Popular[itemIndex] += int32(item.Heating)
 				}
 			}
 		}
@@ -1533,7 +1539,6 @@ func (m *Master) LoadDataFromDatabase(database data.Database, posFeedbackTypes, 
 	LoadDatasetStepSecondsVec.WithLabelValues("load_items").Set(time.Since(start).Seconds())
 
 	// create positive set
-	popularCount := make([]int32, rankingDataset.ItemCount())
 	positiveSet := make([]*i32set.Set, rankingDataset.UserCount())
 	for i := range positiveSet {
 		positiveSet[i] = i32set.New()
@@ -1559,7 +1564,7 @@ func (m *Master) LoadDataFromDatabase(database data.Database, posFeedbackTypes, 
 			positiveSet[userIndex].Add(itemIndex)
 			// insert feedback to popularity counter
 			if f.Timestamp.After(timeWindowLimit) && !rankingDataset.HiddenItems[itemIndex] {
-				popularCount[itemIndex]++
+				rankingDataset.Popular[itemIndex]++
 			}
 			evaluator.Positive(f.FeedbackType, userIndex, itemIndex, f.Timestamp)
 		}
@@ -1664,7 +1669,7 @@ func (m *Master) LoadDataFromDatabase(database data.Database, posFeedbackTypes, 
 	// collect popular items
 	popularItemFilters := make(map[string]*heap.TopKFilter[string, float64])
 	popularItemFilters[""] = heap.NewTopKFilter[string, float64](m.Config.Recommend.CacheSize)
-	for itemIndex, val := range popularCount {
+	for itemIndex, val := range rankingDataset.Popular {
 		itemId := rankingDataset.ItemIndex.ToName(int32(itemIndex))
 		popularItemFilters[""].Push(itemId, float64(val))
 		for _, category := range rankingDataset.ItemCategories[itemIndex] {

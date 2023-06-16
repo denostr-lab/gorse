@@ -59,10 +59,10 @@ n_jobs = 1
 meta_timeout = "10s"
 
 # Username for the master node dashboard.
-dashboard_user_name = ""
+dashboard_user_name = "denostr-lab"
 
 # Password for the master node dashboard.
-dashboard_password = ""
+dashboard_password = "denostr-lab"
 
 # Secret key for admin APIs (SSL required).
 admin_api_key = ""
@@ -90,7 +90,7 @@ cache_expire = "10s"
 [recommend]
 
 # The cache size for recommended/popular/latest items. The default value is 10.
-cache_size = 100
+cache_size = 1000
 
 # Recommended cache expire time. The default value is 72h.
 cache_expire = "72h"
@@ -98,7 +98,7 @@ cache_expire = "72h"
 [recommend.data_source]
 
 # The feedback types for positive events.
-positive_feedback_types = ["star","like"]
+positive_feedback_types = ["star","like","complete"]
 
 # The feedback types for read events.
 read_feedback_types = ["read"]
@@ -181,7 +181,7 @@ enable_model_size_search = false
 [recommend.replacement]
 
 # Replace historical items back to recommendations. The default value is false.
-enable_replacement = false
+enable_replacement = true
 
 # Decay the weights of replaced items from positive feedbacks. The default value is 0.8.
 positive_replacement_decay = 0.8
@@ -201,10 +201,10 @@ refresh_recommend_period = "24h"
 enable_latest_recommend = true
 
 # Enable popular recommendation during offline recommendation. The default value is false.
-enable_popular_recommend = false
+enable_popular_recommend = true
 
 # Enable user-based similarity recommendation during offline recommendation. The default value is false.
-enable_user_based_recommend = true
+enable_user_based_recommend = false
 
 # Enable item-based similarity recommendation during offline recommendation. The default value is false.
 enable_item_based_recommend = false
@@ -229,7 +229,7 @@ explore_recommend = { popular = 0.1, latest = 0.2 }
 #   popular: Recommend popular items to cold-start users.
 #   latest: Recommend latest items to cold-start users.
 # Recommenders are used in order. The default values is ["latest"].
-fallback_recommend = ["item_based", "latest"]
+fallback_recommend = ["popular", "latest"]
 
 # The number of feedback used in fallback item-based similar recommendation. The default values is 10.
 num_feedback_fallback_item_based = 10

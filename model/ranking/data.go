@@ -43,6 +43,7 @@ type DataSet struct {
 	ItemLabels     [][]int32
 	UserLabels     [][]int32
 	HiddenItems    []bool
+	Popular        []int32
 	ItemCategories [][]string
 	CategorySet    *strset.Set
 	// statistics
@@ -94,6 +95,7 @@ func (dataset *DataSet) Bytes() int {
 	bytes += reflect.TypeOf(dataset.ItemLabels).Elem().Elem().Size() * uintptr(dataset.NumItemLabelUsed+dataset.NumUserLabelUsed)
 
 	bytes += encoding.ArrayBytes(dataset.HiddenItems)
+	bytes += encoding.ArrayBytes(dataset.Popular)
 	bytes += encoding.ArrayBytes(dataset.ItemCategories)
 	return int(bytes)
 }
@@ -199,6 +201,7 @@ func (dataset *DataSet) Split(numTestUsers int, seed int64) (*DataSet, *DataSet)
 	trainSet.NumItemLabels, testSet.NumItemLabels = dataset.NumItemLabels, dataset.NumItemLabels
 	trainSet.NumUserLabels, testSet.NumUserLabels = dataset.NumUserLabels, dataset.NumUserLabels
 	trainSet.HiddenItems, testSet.HiddenItems = dataset.HiddenItems, dataset.HiddenItems
+	trainSet.Popular, testSet.Popular = dataset.Popular, dataset.Popular
 	trainSet.ItemCategories, testSet.ItemCategories = dataset.ItemCategories, dataset.ItemCategories
 	trainSet.CategorySet, testSet.CategorySet = dataset.CategorySet, dataset.CategorySet
 	trainSet.ItemLabels, testSet.ItemLabels = dataset.ItemLabels, dataset.ItemLabels

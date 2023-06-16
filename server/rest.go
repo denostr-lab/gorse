@@ -1363,6 +1363,7 @@ type Item struct {
 	Categories []string
 	Timestamp  string
 	Labels     []string
+	Heating    int
 	Comment    string
 }
 
@@ -1412,6 +1413,7 @@ func (s *RestServer) batchInsertItems(ctx context.Context, response *restful.Res
 			Categories: item.Categories,
 			Timestamp:  timestamp,
 			Labels:     item.Labels,
+			Heating:    item.Heating,
 			Comment:    item.Comment,
 		})
 		// collect latest items and poplar items

@@ -317,6 +317,7 @@ func (suite *GorseClientTestSuite) TestItems() {
 		Labels:     []string{"a", "b", "c"},
 		Categories: []string{"d", "e"},
 		Timestamp:  timestamp,
+		Heating:    0,
 		Comment:    "comment",
 	}
 	itemPatch := ItemPatch{
