@@ -57,6 +57,7 @@ type Item struct {
 	Labels     []string `json:"Labels"`
 	Categories []string `json:"Categories"`
 	Timestamp  string   `json:"Timestamp"`
+	Heating    int      `json:"Heating"`
 	Comment    string   `json:"Comment"`
 }
 
@@ -65,5 +66,6 @@ type ItemPatch struct {
 	Categories []string
 	Timestamp  *time.Time
 	Labels     []string
+	Heating    *int
 	Comment    *string
 }

@@ -1,0 +1,27 @@
+@host = 192.168.8.211:8087
+
+###
+GET http://{{host}}/api/items HTTP/1.1
+
+###
+POST http://{{host}}/api/item HTTP/1.1
+Content-Type: application/json
+
+{
+    "ItemId": "idontknow",
+    "IsHidden": false,
+    "Categories": null,
+    "Timestamp": "2023-06-11T15:51:12Z",
+    "Heating": 0,
+    "Comment": "idontknow"
+}
+
+###
+PATCH http://{{host}}/api/item/idontknow HTTP/1.1
+Content-Type: application/json
+
+{
+    "IsHidden": false,
+    "Timestamp": "2023-06-11T15:52:12Z",
+    "Heating": 1000
+}

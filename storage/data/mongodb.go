@@ -224,6 +224,9 @@ func (db *MongoDB) ModifyItem(ctx context.Context, itemId string, patch ItemPatc
 	if patch.Labels != nil {
 		update["labels"] = patch.Labels
 	}
+	if patch.Heating != nil {
+		update["heating"] = patch.Heating
+	}
 	if patch.Timestamp != nil {
 		update["timestamp"] = patch.Timestamp
 	}

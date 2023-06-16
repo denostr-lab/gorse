@@ -1306,6 +1306,7 @@ type Item struct {
 	Categories []string
 	Timestamp  string
 	Labels     any
+	Heating    int
 	Comment    string
 }
 
@@ -1354,6 +1355,7 @@ func (s *RestServer) batchInsertItems(ctx context.Context, response *restful.Res
 			Categories: item.Categories,
 			Timestamp:  timestamp,
 			Labels:     item.Labels,
+			Heating:    item.Heating,
 			Comment:    item.Comment,
 		})
 		// insert to latest items cache

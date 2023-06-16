@@ -98,6 +98,7 @@ type Item struct {
 	Categories []string  `gorm:"serializer:json" mapstructure:"categories"`
 	Timestamp  time.Time `gorm:"column:time_stamp" mapstructure:"timestamp"`
 	Labels     any       `gorm:"serializer:json" mapstructure:"labels"`
+	Heating    int       `mapstructure:"heating"`
 	Comment    string    `mapsstructure:"comment"`
 }
 
@@ -107,6 +108,7 @@ type ItemPatch struct {
 	Categories []string
 	Timestamp  *time.Time
 	Labels     any
+	Heating    *int
 	Comment    *string
 }
 
