@@ -1,0 +1,120 @@
+version: "3"
+
+services:
+  redis:
+    container_name: gorse-cache-server
+    image: redis:6
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:6379:6379'
+
+  mongo:
+    container_name: gorse-db-server
+    image: mongo:5.0
+    ports:
+      - '127.0.0.1:27017:27017'
+    environment:
+      MONGO_INITDB_DATABASE: gorse
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - ${PWD}/.out/data:/data/db
+
+  worker0:
+    container_name: gorse-worker0
+    build:
+      context: .
+      dockerfile: cmd/gorse-worker/Dockerfile
+    restart: unless-stopped
+    command: >
+      --master-host gorse-master --master-port 8086
+      --http-host 0.0.0.0 --http-port 8089
+      --log-path /var/log/gorse/worker0_cache.log
+      --cache-path /var/lib/gorse/worker0_cache.data
+    volumes:
+      - gorse_log:/var/log/gorse
+      - worker_data:/var/lib/gorse
+    depends_on:
+      - master
+  worker1:
+    container_name: gorse-worker1
+    build:
+      context: .
+      dockerfile: cmd/gorse-worker/Dockerfile
+    restart: unless-stopped
+    command: >
+      --master-host gorse-master --master-port 8086
+      --http-host 0.0.0.0 --http-port 8089
+      --log-path /var/log/gorse/worker1_cache.log
+      --cache-path /var/lib/gorse/worker1_cache.data
+    volumes:
+      - gorse_log:/var/log/gorse
+      - worker_data:/var/lib/gorse
+    depends_on:
+      - master
+  worker2:
+    container_name: gorse-worker2
+    build:
+      context: .
+      dockerfile: cmd/gorse-worker/Dockerfile
+    restart: unless-stopped
+    command: >
+      --master-host gorse-master --master-port 8086
+      --http-host 0.0.0.0 --http-port 8089
+      --log-path /var/log/gorse/worker2_cache.log
+      --cache-path /var/lib/gorse/worker2_cache.data
+    volumes:
+      - gorse_log:/var/log/gorse
+      - worker_data:/var/lib/gorse
+    depends_on:
+      - master
+
+  server0:
+    container_name: gorse-server0
+    build:
+      context: .
+      dockerfile: cmd/gorse-server/Dockerfile
+    restart: unless-stopped
+    ports:
+      - 8087:8087
+    command: >
+      --master-host gorse-master --master-port 8086 
+      --http-host 0.0.0.0 --http-port 8087
+      --log-path /var/log/gorse/server0.log 
+      --cache-path /var/lib/gorse/server0_cache.data
+    volumes:
+      - gorse_log:/var/log/gorse
+      - server_data:/var/lib/gorse
+    depends_on:
+      - master
+
+  master:
+    container_name: gorse-master
+    build:
+      context: .
+      dockerfile: cmd/gorse-master/Dockerfile
+    restart: unless-stopped
+    ports:
+      # - 8086:8086
+      - 8088:8088
+    environment:
+      GORSE_CACHE_STORE: redis://gorse-cache-server:6379/0
+      GORSE_DATA_STORE: mongodb://root:password@gorse-db-server:27017/gorse?authSource=admin
+      GORSE_MASTER_JOBS: 3
+    command: >
+      -c /etc/gorse/config.toml 
+      --log-path /var/log/gorse/master.log 
+      --cache-path /var/lib/gorse/master_cache.data
+    volumes:
+      - ./config/config.toml:/etc/gorse/config.toml
+      - gorse_log:/var/log/gorse
+      - master_data:/var/lib/gorse
+    depends_on:
+      - redis
+      - mongo
+
+volumes:
+  worker_data:
+  server_data:
+  master_data:
+  gorse_log:

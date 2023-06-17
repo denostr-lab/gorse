@@ -98,7 +98,7 @@ cache_expire = "72h"
 [recommend.data_source]
 
 # The feedback types for positive events.
-positive_feedback_types = ["star","like","complete"]
+positive_feedback_types = ["star", "like", "complete"]
 
 # The feedback types for read events.
 read_feedback_types = ["read"]
@@ -164,10 +164,10 @@ index_recall = 0.9
 index_fit_epoch = 3
 
 # The time period for model fitting. The default value is "60m".
-model_fit_period = "60m"
+model_fit_period = "3m"
 
 # The time period for model searching. The default value is "360m".
-model_search_period = "360m"
+model_search_period = "10m"
 
 # The number of epochs for model searching. The default value is 100.
 model_search_epoch = 100
@@ -181,7 +181,7 @@ enable_model_size_search = false
 [recommend.replacement]
 
 # Replace historical items back to recommendations. The default value is false.
-enable_replacement = true
+enable_replacement = false
 
 # Decay the weights of replaced items from positive feedbacks. The default value is 0.8.
 positive_replacement_decay = 0.8
@@ -198,10 +198,10 @@ check_recommend_period = "1m"
 refresh_recommend_period = "24h"
 
 # Enable latest recommendation during offline recommendation. The default value is false.
-enable_latest_recommend = true
+enable_latest_recommend = false
 
 # Enable popular recommendation during offline recommendation. The default value is false.
-enable_popular_recommend = true
+enable_popular_recommend = false
 
 # Enable user-based similarity recommendation during offline recommendation. The default value is false.
 enable_user_based_recommend = false
@@ -210,17 +210,17 @@ enable_user_based_recommend = false
 enable_item_based_recommend = false
 
 # Enable collaborative filtering recommendation during offline recommendation. The default value is true.
-enable_collaborative_recommend = true
+enable_collaborative_recommend = false
 
 # Enable click-though rate prediction during offline recommendation. Otherwise, results from multi-way recommendation
 # would be merged randomly. The default value is false.
-enable_click_through_prediction = true
+enable_click_through_prediction = false
 
 # The explore recommendation method is used to inject popular items or latest items into recommended result:
 #   popular: Recommend popular items to cold-start users.
 #   latest: Recommend latest items to cold-start users.
 # The default values is { popular = 0.0, latest = 0.0 }.
-explore_recommend = { popular = 0.1, latest = 0.2 }
+explore_recommend = { popular = 0.0, latest = 0.0 }
 
 [recommend.online]
 

@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
     "UserId": "022771d3e0167f49da17db71354dbffffcc0e8c37548b93df77c38043e217050",
-    "Labels": null,
+    "Labels": ["chat"],
     "Subscribe": null,
     "Comment": ""
 }
@@ -25,14 +25,15 @@ Content-Type: application/json
 {
     "ItemId": "idontknow",
     "IsHidden": false,
-    "Categories": null,
+    "Categories": ["default"],
     "Timestamp": "2023-06-11T15:51:12Z",
+    "Labels": ["chat"],
     "Heating": 0,
     "Comment": "idontknow"
 }
 
 ###
-PATCH http://{{host}}/api/item/007a01cacba4455ce87eb46aa79d0881dfe120fb16f9dba602a1ff0b347f1491 HTTP/1.1
+PATCH http://{{host}}/api/item/709749b6cc30949f8c3b98fed40cdd7d697232a60ece705399dadb050b342285 HTTP/1.1
 Content-Type: application/json
 
 {
@@ -42,7 +43,10 @@ Content-Type: application/json
 }
 
 ###
-GET http://{{host}}/api/item//65de32c8c94cb526f28ea654b2397e07da3lac721c9524627f73845ddc6fafaa HTTP/1.1
+GET http://{{host}}/api/user/022771d3e0167f49da17db71354dbffffcc0e8c37548b93df77c38043e217050 HTTP/1.1
+
+###
+GET http://{{host}}/api/item/709749b6cc30949f8c3b98fed40cdd7d697232a60ece705399dadb050b342285 HTTP/1.1
 
 ###
 GET http://{{host}}/api/latest HTTP/1.1
@@ -51,7 +55,7 @@ GET http://{{host}}/api/latest HTTP/1.1
 GET http://{{host}}/api/popular HTTP/1.1
 
 ###
-GET http://{{host}}/api/recommend/022771d3e0167f49da17db71354dbffffcc0e8c37548b93df77c38043e217050 HTTP/1.1
+GET http://{{host}}/api/recommend/045210293d2c45c7cca03349509d1aa50d66c9495ca81eb0a9e769eb08ca6819 HTTP/1.1
 
 ###
 GET http://{{host}}/api/feedback HTTP/1.1
@@ -64,8 +68,8 @@ Content-Type: application/json
     {
         "Comment": "",
         "FeedbackType": "read",
-        "ItemId": "idontknow",
-        "Timestamp": "2023-06-16T15:51:12Z",
-        "UserId": "022771d3e0167f49da17db71354dbffffcc0e8c37548b93df77c38043e217050"
+        "ItemId": "09e05d9def26adc0de9b7f9e5f0162c611b35348afa2ab9c183a1f1a727472b7",
+        "Timestamp": "2023-06-17T05:01:12Z",
+        "UserId": "045210293d2c45c7cca03349509d1aa50d66c9495ca81eb0a9e769eb08ca6819"
     }
 ]
