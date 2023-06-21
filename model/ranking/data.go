@@ -17,6 +17,10 @@ package ranking
 import (
 	"bufio"
 	"fmt"
+	"os"
+	"reflect"
+	"strings"
+
 	"github.com/juju/errors"
 	"github.com/scylladb/go-set"
 	"github.com/scylladb/go-set/i32set"
@@ -26,9 +30,6 @@ import (
 	"github.com/zhenghaoz/gorse/base/log"
 	"github.com/zhenghaoz/gorse/model"
 	"go.uber.org/zap"
-	"os"
-	"reflect"
-	"strings"
 )
 
 // DataSet contains preprocessed data structures for recommendation models.
@@ -43,7 +44,7 @@ type DataSet struct {
 	ItemLabels     [][]int32
 	UserLabels     [][]int32
 	HiddenItems    []bool
-	Popular        []int32
+	Popular        []float64
 	ItemCategories [][]string
 	CategorySet    *strset.Set
 	// statistics
